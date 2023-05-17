@@ -38,9 +38,9 @@
       <hr />
 
       <form name="send-cookie">
-        <label for="cookie-content">Send message through cookie:</label>
+        <label for="cookie-content">Set User through cookie:</label>
         <input type="text" name="cookie-content" value="" />
-        <button type="submit" id="submit-cookie">Submit</button>
+        <button type="submit" id="submit-cookie">Login</button>
       </form>
     </main>
 
@@ -53,7 +53,7 @@
       formSendCookie.addEventListener("submit", onSubmit);
 
       function onSubmit(event) {
-        const API_URL = "/setcookie";
+        const API_URL = "/login";
         event.preventDefault();
         event.stopPropagation();
         console.log(inputContent.value);
@@ -62,10 +62,13 @@
           method: "POST",
           body: payload,
           headers: { "Content-Type": "application/json" },
-          // credentials: "include",
-        }).catch((error) => {
-          console.error(error);
-        });
+        })
+          .then(() => {
+            window.location = "/setsession";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     </script>
   </body>

@@ -35,29 +35,8 @@ app.get("/", (req, res) => {
 
 app.get("/setsession", (req, res) => {
   let redirectTarget = "";
-  const cookieContent = req?.query?.content;
-  const options = {
-    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-  };
-  if (ENV === "prod") {
-    options.secure = true;
-    options.sameSite = "none";
-  }
-  const domain = req.get("host");
-  if (domain.includes("hassan.web.id")) {
-    options.domain = ".hassan.web.id";
-  }
-  if (domain.includes("hasssan.com")) {
-    options.domain = ".hasssan.com";
-    redirectTarget = getRedirectTarget("hassan.web.id");
-  }
-  res.cookie(cookieName, cookieContent, options);
-  res.redirect(`${redirectTarget}/`);
-});
-
-app.post("/setcookie", (req, res) => {
-  let redirectTarget = "";
-  const cookieContent = req?.body?.cookieContent;
+  let redirectURL = "/setsetsession";
+  const cookieContent = req?.query?.content ?? req?.cookies[cookieName];
   const options = {
     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   };
@@ -69,13 +48,39 @@ app.post("/setcookie", (req, res) => {
   if (domain.includes("hassan.web.id")) {
     options.domain = ".hassan.web.id";
     redirectTarget = getRedirectTarget("hasssan.com");
+    redirectURL = `${redirectTarget}/setsession?content=${cookieContent}`;
   }
   if (domain.includes("hasssan.com")) {
     options.domain = ".hasssan.com";
     redirectTarget = getRedirectTarget("hassan.web.id");
+    redirectURL = `${redirectTarget}/`;
   }
   res.cookie(cookieName, cookieContent, options);
-  res.redirect(`${redirectTarget}/setsession?content=${cookieContent}`);
+  res.redirect(`${redirectURL}`);
+});
+
+app.post("/login", (req, res) => {
+  // let redirectTarget = "";
+  const cookieContent = req?.body?.cookieContent;
+  const options = {
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+  };
+  if (ENV === "prod") {
+    options.secure = true;
+    options.sameSite = "none";
+  }
+  const domain = req.get("host");
+  if (domain.includes("hassan.web.id")) {
+    options.domain = ".hassan.web.id";
+    // redirectTarget = getRedirectTarget("hasssan.com");
+  }
+  if (domain.includes("hasssan.com")) {
+    options.domain = ".hasssan.com";
+    // redirectTarget = getRedirectTarget("hassan.web.id");
+  }
+  res.cookie(cookieName, cookieContent, options);
+  res.json({});
+  // res.redirect(302, `${redirectTarget}/setsession?content=${cookieContent}`);
 });
 
 // Start the server
