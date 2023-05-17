@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon -e js,html server.js"
+    "cross-working": "nodemon -e js,html cross-working.js",
+    "cross-not-working": "nodemon -e js,html cross-not-working.js"
   },
   "type": "module",
   "keywords": [],

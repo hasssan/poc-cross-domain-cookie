@@ -41,7 +41,7 @@ app.use(cors());
 // Define a route
 app.get("/", (req, res) => {
   const message = req?.cookies[cookieName] ?? "no message from the cookie";
-  res.render("index.html", { message });
+  res.render("cross-working.html", { message });
 });
 
 app.get("/setsession", (req, res) => {
@@ -67,23 +67,19 @@ app.get("/setsession", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  // let redirectTarget = "";
   const cookieContent = req?.body?.cookieContent;
 
   const domain = req.get("host");
   if (domain.includes(firstDomain)) {
     cookieOptions.domain = `.${firstDomain}`;
-    // redirectTarget = getRedirectTarget(secondDomain);
   }
 
   if (domain.includes(secondDomain)) {
     cookieOptions.domain = `.${secondDomain}`;
-    // redirectTarget = getRedirectTarget(firstDomain);
   }
 
   res.cookie(cookieName, cookieContent, cookieOptions);
   res.json({});
-  // res.redirect(302, `${redirectTarget}/setsession?content=${cookieContent}`);
 });
 
 // Start the server

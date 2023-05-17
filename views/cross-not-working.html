@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>cross-domain cookie POC</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css" />
+    <style>
+      :root {
+        --active-brightness: 0.85;
+        --border-radius: 5px;
+        --box-shadow: 2px 2px 10px;
+        --color-accent: #118bee15;
+        --color-bg: #fff;
+        --color-bg-secondary: #e9e9e9;
+        --color-link: #118bee;
+        --color-secondary: #920de9;
+        --color-secondary-accent: #920de90b;
+        --color-shadow: #f4f4f4;
+        --color-table: #118bee;
+        --color-text: #000;
+        --color-text-secondary: #999;
+        --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        --hover-brightness: 1.2;
+        --justify-important: center;
+        --justify-normal: left;
+        --line-height: 1.5;
+        --width-card: 285px;
+        --width-card-medium: 460px;
+        --width-card-wide: 800px;
+        --width-content: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Cross Domain Cookie POC</h1>
+      <p>Message from Cross Domain Cookie <code>{{ message }}</code></p>
+      <hr />
+
+      <form name="send-cookie">
+        <label for="cookie-content">Set User through cookie:</label>
+        <input type="text" name="cookie-content" value="" />
+        <button type="submit" id="submit-cookie">Login</button>
+      </form>
+    </main>
+
+    <script>
+      const formSendCookie = document.querySelector('form[name="send-cookie"]');
+      const inputContent = document.querySelector(
+        'input[name="cookie-content"]'
+      );
+
+      formSendCookie.addEventListener("submit", onSubmit);
+
+      function onSubmit(event) {
+        const API_URL = "/login";
+        event.preventDefault();
+        event.stopPropagation();
+        console.log(inputContent.value);
+        const payload = JSON.stringify({ cookieContent: inputContent.value });
+        fetch(API_URL, {
+          method: "POST",
+          body: payload,
+          headers: { "Content-Type": "application/json" },
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+    </script>
+  </body>
+</html>
