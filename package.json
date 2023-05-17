@@ -2,9 +2,9 @@
   "name": "cross-domain-cookie",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js"
   },
   "type": "module",
   "keywords": [],
@@ -17,6 +17,7 @@
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
-    "eslint": "^8.40.0"
+    "eslint": "^8.40.0",
+    "nodemon": "^2.0.22"
   }
 }
