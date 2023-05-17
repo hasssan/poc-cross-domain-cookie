@@ -10,8 +10,8 @@ const port = 3000; // Set the desired port number
 const cookieName = "cors-cookie";
 const protocol = "http";
 
-const firstDomain = "hassan.web.id";
-const secondDomain = "hasssan.com";
+const firstDomain = "firstdomain.com";
+const secondDomain = "seconddomain.com";
 
 const cookieOptions = {
   maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
