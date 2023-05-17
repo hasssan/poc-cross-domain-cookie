@@ -1,12 +1,18 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const ENV = "dev";
 
 const app = express();
 const port = 3000; // Set the desired port number
 const cookieName = "cors-cookie";
+const protocol = "http";
+
+function getRedirectTarget(domain) {
+  return `${protocol}://cookie-cors.${domain}:3000`;
+}
 
 // Configure Nunjucks as the template engine
 nunjucks.configure("views", {
@@ -19,16 +25,17 @@ app.set("views", "views");
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors());
 
 // Define a route
 app.get("/", (req, res) => {
-  console.log(req.cookies);
   const message = req?.cookies[cookieName] ?? "no message from the cookie";
   res.render("index.html", { message });
 });
 
-app.post("/setcookie", (req, res) => {
-  const cookieContent = req?.body?.cookieContent;
+app.get("/setsession", (req, res) => {
+  let redirectTarget = "";
+  const cookieContent = req?.query?.content;
   const options = {
     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   };
@@ -42,9 +49,33 @@ app.post("/setcookie", (req, res) => {
   }
   if (domain.includes("hasssan.com")) {
     options.domain = ".hasssan.com";
+    redirectTarget = getRedirectTarget("hassan.web.id");
   }
   res.cookie(cookieName, cookieContent, options);
-  res.redirect("/");
+  res.redirect(`${redirectTarget}/`);
+});
+
+app.post("/setcookie", (req, res) => {
+  let redirectTarget = "";
+  const cookieContent = req?.body?.cookieContent;
+  const options = {
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+  };
+  if (ENV === "prod") {
+    options.secure = true;
+    options.sameSite = "none";
+  }
+  const domain = req.get("host");
+  if (domain.includes("hassan.web.id")) {
+    options.domain = ".hassan.web.id";
+    redirectTarget = getRedirectTarget("hasssan.com");
+  }
+  if (domain.includes("hasssan.com")) {
+    options.domain = ".hasssan.com";
+    redirectTarget = getRedirectTarget("hassan.web.id");
+  }
+  res.cookie(cookieName, cookieContent, options);
+  res.redirect(`${redirectTarget}/setsession?content=${cookieContent}`);
 });
 
 // Start the server
