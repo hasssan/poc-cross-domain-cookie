@@ -1,5 +1,7 @@
 # Cross-domain cookie POC
 
+> **Recommended** to run on Node.js version **>= 20**.
+
 ## Local testing
 
 ### Add this to `/etc/hosts` file:
