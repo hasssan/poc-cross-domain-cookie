@@ -1,5 +1,7 @@
 # Cross-domain cookie POC
 
+This is just Proof-Of-Concept. DO NOT use it directly on your code or Production.
+
 > **Recommended** to run on Node.js version **>= 20**.
 
 ## Local testing
