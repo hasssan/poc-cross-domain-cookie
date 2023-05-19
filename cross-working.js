@@ -43,6 +43,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   const message = req?.cookies[cookieName] ?? "no message from the cookie";
   const showLogin = req?.get("host").includes(firstDomain);
+
   res.render("cross-working.html", { message, showLogin });
 });
 
@@ -80,10 +81,6 @@ app.post("/login", (req, res) => {
   const domain = req.get("host");
   if (domain.includes(firstDomain)) {
     cookieOptions.domain = `.${firstDomain}`;
-  }
-
-  if (domain.includes(secondDomain)) {
-    cookieOptions.domain = `.${secondDomain}`;
   }
 
   res.cookie(cookieName, cookieContent, cookieOptions);

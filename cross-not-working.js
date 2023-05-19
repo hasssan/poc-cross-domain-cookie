@@ -10,8 +10,9 @@ const port = 3000; // Set the desired port number
 const cookieName = "cors-cookie";
 const protocol = "http";
 
-const firstDomain = "firstdomain.com";
-const secondDomain = "seconddomain.com";
+const firstDomain = "1st.com";
+const secondDomain = "2nd.com";
+const thirdDomain = "3rd.com";
 
 const cookieOptions = {
   maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
@@ -41,7 +42,9 @@ app.use(cors());
 // Define a route
 app.get("/", (req, res) => {
   const message = req?.cookies[cookieName] ?? "no message from the cookie";
-  res.render("cross-not-working.html", { message });
+  const showLogin = req?.get("host").includes(firstDomain);
+
+  res.render("cross-not-working.html", { message, showLogin });
 });
 
 app.get("/setsession", (req, res) => {
@@ -58,6 +61,12 @@ app.get("/setsession", (req, res) => {
 
   if (domain.includes(secondDomain)) {
     cookieOptions.domain = `.${secondDomain}`;
+    redirectTarget = getRedirectTarget(thirdDomain);
+    redirectURL = `${redirectTarget}/setsession?content=${cookieContent}`;
+  }
+
+  if (domain.includes(thirdDomain)) {
+    cookieOptions.domain = `.${thirdDomain}`;
     redirectTarget = getRedirectTarget(firstDomain);
     redirectURL = `${redirectTarget}/`;
   }
@@ -74,11 +83,6 @@ app.post("/login", (req, res) => {
   if (domain.includes(firstDomain)) {
     cookieOptions.domain = `.${firstDomain}`;
     redirectTarget = getRedirectTarget(secondDomain);
-  }
-
-  if (domain.includes(secondDomain)) {
-    cookieOptions.domain = `.${secondDomain}`;
-    redirectTarget = getRedirectTarget(firstDomain);
   }
 
   res.cookie(cookieName, cookieContent, cookieOptions);
