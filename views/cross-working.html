@@ -66,6 +66,7 @@
           headers: { "Content-Type": "application/json" },
         })
           .then(() => {
+            // The key to trigger document/Redirect
             window.location = "/setsession";
           })
           .catch((error) => {

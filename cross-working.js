@@ -22,7 +22,7 @@ if (ENV === "prod") {
   cookieOptions.sameSite = "none";
 }
 
-function getRedirectTarget(domain) {
+function getBaseURL(domain) {
   return `${protocol}://cookie-cors.${domain}:3000`;
 }
 
@@ -55,19 +55,19 @@ app.get("/setsession", (req, res) => {
 
   if (domain.includes(firstDomain)) {
     cookieOptions.domain = `.${firstDomain}`;
-    redirectTarget = getRedirectTarget(secondDomain);
+    redirectTarget = getBaseURL(secondDomain);
     redirectURL = `${redirectTarget}/setsession?content=${cookieContent}`;
   }
 
   if (domain.includes(secondDomain)) {
     cookieOptions.domain = `.${secondDomain}`;
-    redirectTarget = getRedirectTarget(thirdDomain);
+    redirectTarget = getBaseURL(thirdDomain);
     redirectURL = `${redirectTarget}/setsession?content=${cookieContent}`;
   }
 
   if (domain.includes(thirdDomain)) {
     cookieOptions.domain = `.${thirdDomain}`;
-    redirectTarget = getRedirectTarget(firstDomain);
+    redirectTarget = getBaseURL(firstDomain);
     redirectURL = `${redirectTarget}/`;
   }
 
