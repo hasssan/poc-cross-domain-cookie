@@ -37,11 +37,13 @@
       <p>Message from Cross Domain Cookie <code>{{ message }}</code></p>
       <hr />
 
+      {% if showLogin %}
       <form name="send-cookie">
         <label for="cookie-content">Set User through cookie:</label>
         <input type="text" name="cookie-content" value="" />
         <button type="submit" id="submit-cookie">Login</button>
       </form>
+      {% endif %}
     </main>
 
     <script>
